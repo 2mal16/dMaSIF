@@ -2,7 +2,6 @@ ARG CUDA="10.2"
 ARG CUDNN="7"
 
 FROM nvidia/cuda:${CUDA}-cudnn${CUDNN}-devel-ubuntu16.04
-# FROM pytorch/pytorch:latest
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
@@ -36,26 +35,35 @@ ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 ENV DYLD_LIBRARY_PATH=/usr/local/cuda/lib:$DYLD_LIBRARY_PATH
 
 # install pytorch
-RUN pip install torch==1.6.0+cu102
-RUN pip install torch-cluster==1.5.8+cu102
-RUN pip install torch-geometric==1.6.1+cu102
-RUN pip install torch-scatter==2.0.5+cu102
-RUN pip install torch-sparse==0.6.8+cu102
-RUN pip install torch-spline-conv==1.2.0+cu102
+# RUN pip install torch==1.6.0+cu102 && pip install torch-cluster==1.5.8+cu102 && \
+#     pip install torch-geometric==1.6.1+cu102 && pip install torch-scatter==2.0.5+cu102 && \
+#     pip install torch-sparse==0.6.8+cu102 && pip install torch-spline-conv==1.2.0+cu102
 
 # alternatively install pytorch
-#pip install torch -f https://data.pyg.org/whl/torch-1.6.0+cu102.html
-#pip install torch-cluster -f https://data.pyg.org/whl/torch-1.5.8+cu102.html
-#pip install torch-geometric -f https://data.pyg.org/whl/torch-1.6.1+cu102.html
-#pip install torch-scatter -f https://data.pyg.org/whl/torch-2.0.5+cu102.html
-#pip install torch-sparse -f https://data.pyg.org/whl/torch-0.6.8+cu102.html
-#pip install torch-spline-conv -f https://data.pyg.org/whl/torch-1.2.0+cu102.html
+RUN pip install torch -f https://data.pyg.org/whl/torch-1.6.0+cu102.html && \
+    pip install torch-cluster -f https://data.pyg.org/whl/torch-1.6.0+cu102.html && \
+    pip install torch-geometric -f https://data.pyg.org/whl/torch-1.6.0+cu102.html && \
+    pip install torch-scatter -f https://data.pyg.org/whl/torch-1.6.0+cu102.html && \
+    pip install torch-sparse -f https://data.pyg.org/whl/torch-1.6.0+cu102.html && \
+    pip install torch-spline-conv -f https://data.pyg.org/whl/torch-1.6.0+cu102.html
 
+RUN git clone https://github.com/FreyrS/dMaSIF.git
+WORKDIR /dMaSIF
+
+RUN sed -i "s/torch==1.6.0//g" requirements.txt && \
+    sed -i "s/torch-cluster==1.5.8//g" requirements.txt && \
+    sed -i "s/torch-geometric==1.6.1//g" requirements.txt && \
+    sed -i "s/torch-scatter==2.0.5//g" requirements.txt && \
+    sed -i "s/torch-sparse==0.6.8//g" requirements.txt && \
+    sed -i "s/torch-spline-conv==1.2.0//g" requirements.txt && \
+    sed -i "/^$/d" requirements.txt
+
+RUN apt update && apt install -y vim
 
 # Install dependancies
 RUN pip install -r requirements.txt
 
-WORKDIR /dmasif
 
+CMD [""]
 # Execute the dockerfile building command on terminal
 # sudo docker build -t gioannak:dmasif .
