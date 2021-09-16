@@ -36,12 +36,12 @@ ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 ENV DYLD_LIBRARY_PATH=/usr/local/cuda/lib:$DYLD_LIBRARY_PATH
 
 # install pytorch
-pip install torch==1.6.0+cu102
-pip install torch-cluster==1.5.8+cu102
-pip install torch-geometric==1.6.1+cu102
-pip install torch-scatter==2.0.5+cu102
-pip install torch-sparse==0.6.8+cu102
-pip install torch-spline-conv==1.2.0+cu102
+RUN pip install torch==1.6.0+cu102
+RUN pip install torch-cluster==1.5.8+cu102
+RUN pip install torch-geometric==1.6.1+cu102
+RUN pip install torch-scatter==2.0.5+cu102
+RUN pip install torch-sparse==0.6.8+cu102
+RUN pip install torch-spline-conv==1.2.0+cu102
 
 # alternatively install pytorch
 #pip install torch -f https://data.pyg.org/whl/torch-1.6.0+cu102.html
