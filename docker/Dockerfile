@@ -53,7 +53,7 @@ RUN pip install torch-spline-conv==1.2.0+cu102
 
 
 # Install dependancies
-pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 WORKDIR /dmasif
 
