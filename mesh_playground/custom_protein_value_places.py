@@ -1,10 +1,16 @@
+import numpy as np
+
+#files must be converted to npy (for faster read time)
+
 from plyfile import PlyData
 import numpy as np
 import torch
 from geometry_processing import save_vtk
 
-filename = "./mesh_playground/box.ply"
-output_filename = "./mesh_playground/box_output.vtk"
+filename = "./1A0G_A.ply"
+output_filename = ".1A0G_A_custom.vtk"
+
+# The ply files have all the information. We need the surface.
 
 plydata = PlyData.read(filename)
 triangles = np.vstack(plydata["face"].data["vertex_indices"])
@@ -14,9 +20,8 @@ points = points - np.mean(points, axis=0, keepdims=True)
 
 values = np.zeros(shape = (points.shape[0],3))
 
-values[0,:] = np.array([255,0,0])
-values[1,:] = np.array([255,0,0])
-values[2,:] = np.array([255,0,0])
+for vertice_index in range(1000):
+    values[vertice_index,:] = np.array([255,0,0])
 
 # torchify them
 points = torch.tensor(points, dtype = torch.float32)
