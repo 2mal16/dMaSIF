@@ -52,6 +52,7 @@ train_loader = DataLoader(
     train_dataset, batch_size=1, follow_batch=batch_vars, shuffle=True
 )
 print("Preprocessing training dataset")
+print(args)
 train_dataset = iterate_surface_precompute(train_loader, net, args)
 
 # Train/Validation split:

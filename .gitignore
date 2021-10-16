@@ -16,3 +16,9 @@ timings/
 data_analysis/roc_curves
 data_analysis/.ipynb_checkpoints/
 .ipynb_checkpoints/
+__pycache__/
+data_preprocessing/__pycache__/
+1A0G_A.ply
+models/
+surface_data/
+main_testing_script.py

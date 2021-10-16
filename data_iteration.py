@@ -83,9 +83,10 @@ def save_protein_batch_single(protein_pair_id, P, save_path, pdb_idx):
     xyz = P["xyz"]
 
     inputs = P["input_features"]
+    print("---->",pdb_idx,P.keys())
 
-    embedding = P["embedding_1"] if pdb_idx == 1 else P["embedding_2"]
-    emb_id = 1 if pdb_idx == 1 else 2
+    embedding = P["embedding_1"] #if pdb_idx == 1 else P["embedding_2"]
+    emb_id = 1 #if pdb_idx == 1 else 2
 
     predictions = torch.sigmoid(P["iface_preds"]) if "iface_preds" in P.keys() else 0.0*embedding[:,0].view(-1, 1)
 
@@ -422,6 +423,7 @@ def iterate(
 
 def iterate_surface_precompute(dataset, net, args):
     processed_dataset = []
+    
     for it, protein_pair in enumerate(tqdm(dataset)):
         protein_pair.to(args.device)
         P1, P2 = process(args, protein_pair, net)
