@@ -39,7 +39,7 @@ RUN pip install torch==1.6.0 && \
     pip install torch-sparse==0.6.8 -f https://data.pyg.org/whl/torch-1.6.0+cu102.html && \
     pip install torch-spline-conv==1.2.0 -f https://data.pyg.org/whl/torch-1.6.0+cu102.html
 
-RUN apt update && apt install -y nano gcc-8
+RUN apt update && apt install -y nano gcc-8 openssh-server
 
 ADD ./requirements.txt /
 
@@ -59,18 +59,20 @@ EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
 
 ADD ssh_keys.tar.gz /tmp/
-RUN tar xvfz /tmp/ssh_keys.tar.gz
 RUN mkdir -p /root/.ssh \
-    && mv /tmp/ssh_keys/authorized_keys /root/.ssh/authorized_keys \
+    && mv /tmp/authorized_keys /root/.ssh/authorized_keys \
     && chown root:root /root/.ssh/authorized_keys \
     && chmod 600 /root/.ssh/authorized_keys \
     && stat /root/.ssh/authorized_keys \
-    && rm -rf /tmp/ssh_keys ssh_keys.tar.gz
+    && rm -rf /tmp/*
+
 
 RUN git clone https://github.com/FreyrS/dMaSIF.git
+
+ADD Makefile /dMaSIF/Makefile
 
 WORKDIR /dMaSIF
 
 VOLUME dmasif
 
-CMD [""]
+CMD ["/bin/bash"]
