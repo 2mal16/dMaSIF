@@ -58,8 +58,8 @@ RUN echo "export VISIBLE=now" >> /etc/profile
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
 
-# Copy authorized keys
 ADD ssh_keys.tar.gz /tmp/
+RUN tar xvfz /tmp/ssh_keys.tar.gz
 RUN mkdir -p /root/.ssh \
     && mv /tmp/ssh_keys/authorized_keys /root/.ssh/authorized_keys \
     && chown root:root /root/.ssh/authorized_keys \
