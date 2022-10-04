@@ -3,6 +3,8 @@ ARG CUDNN="7"
 
 FROM nvidia/cuda:${CUDA}-cudnn${CUDNN}-devel-ubuntu18.04
 
+ARG CUDA
+
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 RUN apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/3bf863cc.pub
@@ -27,10 +29,10 @@ ENV CONDA_PREFIX=/miniconda/envs/$CONDA_DEFAULT_ENV
 ENV PATH=$CONDA_PREFIX/bin:$PATH
 ENV CONDA_AUTO_UPDATE_CONDA=false
 
-ENV PATH=/usr/local/cuda/bin:$PATH
-ENV CPATH=/usr/local/cuda/include:$CPATH
-ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
-ENV DYLD_LIBRARY_PATH=/usr/local/cuda/lib:$DYLD_LIBRARY_PATH
+ENV PATH=/usr/local/cuda-${CUDA}/bin:$PATH
+ENV CPATH=/usr/local/cuda-${CUDA}/include:$CPATH
+ENV LD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/lib64:$LD_LIBRARY_PATH
+ENV DYLD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/lib:$DYLD_LIBRARY_PATH
 
 RUN pip install torch==1.6.0 && \
     pip install torch-cluster==1.5.8 -f https://data.pyg.org/whl/torch-1.6.0+cu102.html && \
