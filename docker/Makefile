@@ -5,9 +5,9 @@ CONTAINER_NAME_TEMP=$(CONTAINER_NAME)_temp
 
 CONTAINER_TAG=$(shell echo $(CONTAINER_NAME):0.1)
 DMASIF_SRC=$(realpath .)
-SRC_ROOT?=$(DMASIF_SRC)/../src
-DATA_ROOT?=$(DMASIF_SRC)/../src
-MOUNTS=-v $(SRC_ROOT):/src -v $(DATA_ROOT):/data
+SRC_ROOT?=$(DMASIF_SRC)/../../predict-interaction-patches/
+DATA_ROOT?=$(DMASIF_SRC)/../../predict-interaction-patches/preprocessing/
+MOUNTS=-v $(SRC_ROOT):/MaSIF_colab/mycode -v $(DATA_ROOT):/MaSIF_colab/mydata
 DOCKER_CMD=docker
 PYTHON_CMD=python
 
@@ -31,9 +31,11 @@ run: ## run container production mode
 		$(MOUNTS) \
 		$(CONTAINER_TAG)
 
-run_tests:
-	$(DOCKER_CMD) exec --name $(CONTAINER_NAME) $(PYTHON_CMD) benchmark/dMaSIF_search.sh
+run_tests_training:
+	$(DOCKER_CMD) exec --name $(CONTAINER_NAME) sh benchmark/dMaSIF_search.sh
 
+run_tests_inference:
+	$(DOCKER_CMD) exec --name $(CONTAINER_NAME) $(PYTHON_CMD) main_inference.py
 
 build: ## build container
 	$(DOCKER_CMD) build . -t $(CONTAINER_TAG)
