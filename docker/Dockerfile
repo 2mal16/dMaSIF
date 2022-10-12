@@ -70,12 +70,11 @@ RUN mkdir -p /root/.ssh \
 
 
 RUN git clone https://github.com/FreyrS/dMaSIF.git
+RUN git clone https://github.com/casperg92/MaSIF_colab.git
 
 ADD Makefile /dMaSIF/Makefile
 
-WORKDIR /dMaSIF
-
-ADD ../benchmark/ benchmark
+WORKDIR /MaSIF_colab
 
 VOLUME dmasif
 
