@@ -11,7 +11,7 @@ RUN apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/r
 
 RUN apt-get update -y \
     && apt-get install -y apt-utils git curl ca-certificates bzip2 cmake tree htop bmon iotop g++ \
-    && apt-get install -y libglib2.0-0 libsm6 libxext6 libxrender-dev wget
+    && apt-get install -y libglib2.0-0 libsm6 libxext6 libxrender-dev wget make
 
 RUN cd / && wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     && chmod +x /Miniconda3-latest-Linux-x86_64.sh \
@@ -74,6 +74,8 @@ RUN git clone https://github.com/FreyrS/dMaSIF.git
 ADD Makefile /dMaSIF/Makefile
 
 WORKDIR /dMaSIF
+
+ADD ../benchmark/ benchmark
 
 VOLUME dmasif
 
