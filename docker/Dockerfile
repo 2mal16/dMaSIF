@@ -31,7 +31,7 @@ ENV CONDA_AUTO_UPDATE_CONDA=false
 
 ENV PATH=/usr/local/cuda-${CUDA}/bin:$PATH
 ENV CPATH=/usr/local/cuda-${CUDA}/include:$CPATH
-ENV LD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/lib64:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/compat:$LD_LIBRARY_PATH
 ENV DYLD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/lib:$DYLD_LIBRARY_PATH
 
 RUN pip install torch==1.6.0 && \
@@ -71,7 +71,8 @@ RUN mkdir -p /root/.ssh \
 
 RUN git clone https://github.com/FreyrS/dMaSIF.git
 RUN git clone https://github.com/casperg92/MaSIF_colab.git
-
+RUN git clone https://github.com/rlabduke/reduce && cd reduce
+RUN cmake reduce && make install
 
 ADD Makefile /dMaSIF/Makefile
 
