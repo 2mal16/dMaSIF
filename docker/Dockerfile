@@ -73,9 +73,8 @@ WORKDIR /app
 
 RUN git clone https://github.com/FreyrS/dMaSIF.git
 RUN git clone https://github.com/casperg92/MaSIF_colab.git
+RUN git clone https://github.com/DavidGraber/protein_interaction_DG.git
 
-ADD Makefile /dMaSIF/Makefile
-
-WORKDIR /MaSIF_colab
+WORKDIR /app/predict-interaction-patches/
 
 CMD ["/bin/bash"]
