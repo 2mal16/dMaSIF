@@ -2,3 +2,5 @@
 .idea/**
 ssh_keys.tar.gz
 __pycache__
+src/data_preprocessing
+src/tmp
