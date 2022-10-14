@@ -6,8 +6,8 @@ CONTAINER_NAME_TEMP=$(CONTAINER_NAME)_temp
 CONTAINER_TAG=$(shell echo $(CONTAINER_NAME):0.1)
 DMASIF_SRC=$(realpath .)
 SRC_ROOT?=$(DMASIF_SRC)/../../predict-interaction-patches/
-DATA_ROOT?=$(DMASIF_SRC)/../../predict-interaction-patches/preprocessing/
-MOUNTS=-v $(SRC_ROOT):/MaSIF_colab/mycode -v $(DATA_ROOT):/MaSIF_colab/mydata
+DATA_ROOT?=$(DMASIF_SRC)/../../predict-interaction-patches/preprocessing/npys/
+MOUNTS=-v $(SRC_ROOT):/MaSIF_colab/mycode -v $(DATA_ROOT):/MaSIF_colab/preprocessed_data/
 DOCKER_CMD=docker
 PYTHON_CMD=python
 
