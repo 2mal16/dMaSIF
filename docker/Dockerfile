@@ -68,11 +68,11 @@ RUN mkdir -p /root/.ssh \
     && stat /root/.ssh/authorized_keys \
     && rm -rf /tmp/*
 
+RUN mkdir /app/
+WORKDIR /app
 
 RUN git clone https://github.com/FreyrS/dMaSIF.git
 RUN git clone https://github.com/casperg92/MaSIF_colab.git
-RUN git clone https://github.com/rlabduke/reduce && cd reduce
-RUN cmake reduce && make install
 
 ADD Makefile /dMaSIF/Makefile
 
