@@ -78,6 +78,6 @@ RUN git clone https://github.com/rlabduke/reduce.git
 WORKDIR reduce
 RUN make install
 
-WORKDIR /app/predict-interaction-patches/
+WORKDIR /app
 
 CMD ["/bin/bash"]
