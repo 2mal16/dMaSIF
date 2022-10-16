@@ -74,6 +74,9 @@ WORKDIR /app
 RUN git clone https://github.com/FreyrS/dMaSIF.git
 RUN git clone https://github.com/casperg92/MaSIF_colab.git
 RUN git clone https://github.com/DavidGraber/protein_interaction_DG.git
+RUN git clone https://github.com/rlabduke/reduce.git
+WORKDIR reduce
+RUN make install
 
 WORKDIR /app/predict-interaction-patches/
 
