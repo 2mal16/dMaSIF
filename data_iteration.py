@@ -74,7 +74,6 @@ def process_single(protein_pair, chain_idx=1):
 
 
 def save_protein_batch_single(protein_pair_id, P, save_path, pdb_idx):
-
     protein_pair_id = protein_pair_id.split("_")
     pdb_id = protein_pair_id[0] + "_" + protein_pair_id[pdb_idx]
 
@@ -87,7 +86,7 @@ def save_protein_batch_single(protein_pair_id, P, save_path, pdb_idx):
     embedding = P["embedding_1"] if pdb_idx == 1 else P["embedding_2"]
     emb_id = 1 if pdb_idx == 1 else 2
 
-    predictions = torch.sigmoid(P["iface_preds"]) if "iface_preds" in P.keys() else 0.0*embedding[:,0].view(-1, 1)
+    predictions = torch.sigmoid(P["iface_preds"]) if "iface_preds" in P.keys() else 0.0 * embedding[:, 0].view(-1, 1)
 
     labels = P["labels"].view(-1, 1) if P["labels"] is not None else 0.0 * predictions
 
@@ -99,7 +98,6 @@ def save_protein_batch_single(protein_pair_id, P, save_path, pdb_idx):
 
 
 def project_iface_labels(P, threshold=2.0):
-
     queries = P["xyz"]
     batch_queries = P["batch"]
     source = P["mesh_xyz"]
@@ -112,7 +110,7 @@ def project_iface_labels(P, threshold=2.0):
     D_ij.ranges = diagonal_ranges(batch_queries, batch_source)
     nn_i = D_ij.argmin(dim=1).view(-1)  # (N,)
     nn_dist_i = (
-        D_ij.min(dim=1).view(-1, 1) < threshold
+            D_ij.min(dim=1).view(-1, 1) < threshold
     ).float()  # If chain is not connected because of missing densities MaSIF cut out a part of the protein
 
     query_labels = labels[nn_i] * nn_dist_i
@@ -124,14 +122,14 @@ def process(args, protein_pair, net):
     P1 = process_single(protein_pair, chain_idx=1)
     if not "gen_xyz_p1" in protein_pair.keys:
         net.preprocess_surface(P1)
-        #if P1["mesh_labels"] is not None:
+        # if P1["mesh_labels"] is not None:
         #    project_iface_labels(P1)
     P2 = None
     if not args.single_protein:
         P2 = process_single(protein_pair, chain_idx=2)
         if not "gen_xyz_p2" in protein_pair.keys:
             net.preprocess_surface(P2)
-            #if P2["mesh_labels"] is not None:
+            # if P2["mesh_labels"] is not None:
             #    project_iface_labels(P2)
 
     return P1, P2
@@ -155,7 +153,6 @@ def generate_matchinglabels(args, P1, P2):
 
 
 def compute_loss(args, P1, P2, n_points_sample=16):
-
     if args.search:
         pos_xyz1 = P1["xyz"][P1["labels"] == 1]
         pos_xyz2 = P2["xyz"][P2["labels"] == 1]
@@ -242,15 +239,15 @@ def extract_single(P_batch, number):
 
 
 def iterate(
-    net,
-    dataset,
-    optimizer,
-    args,
-    test=False,
-    save_path=None,
-    pdb_ids=None,
-    summary_writer=None,
-    epoch_number=None,
+        net,
+        dataset,
+        optimizer,
+        args,
+        test=False,
+        save_path=None,
+        pdb_ids=None,
+        summary_writer=None,
+        epoch_number=None,
 ):
     """Goes through one epoch of the dataset, returns information for Tensorboard."""
 
@@ -266,13 +263,13 @@ def iterate(
     total_processed_pairs = 0
     # Loop over one epoch:
     for it, protein_pair in enumerate(
-        tqdm(dataset)
+            tqdm(dataset)
     ):  # , desc="Test " if test else "Train")):
         protein_batch_size = protein_pair.atom_coords_p1_batch[-1].item() + 1
         if save_path is not None:
             batch_ids = pdb_ids[
-                total_processed_pairs : total_processed_pairs + protein_batch_size
-            ]
+                        total_processed_pairs: total_processed_pairs + protein_batch_size
+                        ]
             total_processed_pairs += protein_batch_size
 
         protein_pair.to(args.device)
@@ -293,7 +290,6 @@ def iterate(
 
             P1 = extract_single(P1_batch, protein_it)
             P2 = None if args.single_protein else extract_single(P2_batch, protein_it)
-
 
             if args.random_rotation:
                 P1["rand_rot"] = protein_pair.rand_rot1.view(-1, 3, 3)[0]
@@ -321,7 +317,7 @@ def iterate(
                 if not args.single_protein:
                     P2["rand_rot"] = torch.eye(3, device=P2["xyz"].device)
                     P2["atom_center"] = torch.zeros((1, 3), device=P2["xyz"].device)
-                    
+
             torch.cuda.synchronize()
             prediction_time = time.time()
             outputs = net(P1, P2)
@@ -420,6 +416,7 @@ def iterate(
     # Final post-processing:
     return info
 
+
 def iterate_surface_precompute(dataset, net, args):
     processed_dataset = []
     for it, protein_pair in enumerate(tqdm(dataset)):
@@ -429,14 +426,14 @@ def iterate_surface_precompute(dataset, net, args):
             P1["rand_rot"] = protein_pair.rand_rot1
             P1["atom_center"] = protein_pair.atom_center1
             P1["xyz"] = (
-                torch.matmul(P1["rand_rot"].T, P1["xyz"].T).T + P1["atom_center"]
+                    torch.matmul(P1["rand_rot"].T, P1["xyz"].T).T + P1["atom_center"]
             )
             P1["normals"] = torch.matmul(P1["rand_rot"].T, P1["normals"].T).T
             if not args.single_protein:
                 P2["rand_rot"] = protein_pair.rand_rot2
                 P2["atom_center"] = protein_pair.atom_center2
                 P2["xyz"] = (
-                    torch.matmul(P2["rand_rot"].T, P2["xyz"].T).T + P2["atom_center"]
+                        torch.matmul(P2["rand_rot"].T, P2["xyz"].T).T + P2["atom_center"]
                 )
                 P2["normals"] = torch.matmul(P2["rand_rot"].T, P2["normals"].T).T
         protein_pair = protein_pair.to_data_list()[0]
