@@ -17,7 +17,7 @@ def load_structure_np(fname, center):
     types = []
     for atom in atoms:
         coords.append(atom.get_coord())
-        types.append(ele2num[atom.element])
+        types.append(ele2num.get(atom.element, 0))  # set default value
 
     coords = np.stack(coords)
     types_array = np.zeros((len(types), len(ele2num)))

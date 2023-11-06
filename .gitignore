@@ -17,3 +17,9 @@ data_analysis/roc_curves
 data_analysis/.ipynb_checkpoints/
 .ipynb_checkpoints/
 .idea/
+__pycache__
+.env
+data_preprocessing/tmp/
+data_preprocessing/pdbs/
+data_preprocessing/npys/
+preds/

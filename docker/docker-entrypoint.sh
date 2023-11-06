@@ -3,14 +3,14 @@
 set -e
 
 cd data_preprocessing
-# mkdir -p tmp pdbs npys
+mkdir -p tmp pdbs npys
 if [[ -z "${DMASIF_PDB_LIST}" ]]; then
-  DMASIF_PDB_LIST="pdb_dmasif_list.txt"
+  DMASIF_PDB_LIST="pdb_dmasif_list_train.txt"
 else
   DMASIF_PDB_LIST="${DMASIF_PDB_LIST}"
 fi
 
-echo "Processing with DMASIF_PDB_LIST: ${DMASIF_PDB_LIST}"
+echo ${DMASIF_PDB_LIST}
 
 python download_pdb.py --pdb_list /inputs/${DMASIF_PDB_LIST}
 # python download_pdb.py --pdb_list /inputs/pdb_dmasif_list_train.txt
