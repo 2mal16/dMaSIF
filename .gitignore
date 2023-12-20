@@ -23,3 +23,5 @@ data_preprocessing/tmp/
 data_preprocessing/pdbs/
 data_preprocessing/npys/
 preds/
+.venv
+docker/ssh_keys.tar.gz

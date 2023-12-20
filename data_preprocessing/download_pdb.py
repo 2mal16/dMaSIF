@@ -129,10 +129,14 @@ def get_single(pdb_id: str,chains: list):
         print(pdb_filename)
         
         extractPDB(pdb_filename, str(out_filename), chain)
-        protein = load_structure_np(out_filename,center=False)
-        np.save(npy_dir / f"{pdb_id}_{chain}_atomxyz", protein["xyz"])
-        np.save(npy_dir / f"{pdb_id}_{chain}_atomtypes", protein["types"])
-
+        try:
+            protein = load_structure_np(out_filename,center=False)
+            np.save(npy_dir / f"{pdb_id}_{chain}_atomxyz", protein["xyz"])
+            np.save(npy_dir / f"{pdb_id}_{chain}_atomtypes", protein["types"])
+        except:
+            print(f"Error in {pdb_id}_{chain}")
+            continue
+        
 if __name__ == '__main__':
     args = parser.parse_args()
     if args.pdb != '':
