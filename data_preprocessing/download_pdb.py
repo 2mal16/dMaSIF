@@ -122,8 +122,9 @@ def get_single(pdb_id: str,chains: list):
     # Extract chains of interest.
     for chain in chains:
         out_filename = Path(pdb_dir/f"{pdb_id}_{chain}.pdb")
-        print(f"Processing{out_filename}")
+        print(f"Processing: {out_filename}")
         if out_filename.exists():
+            print(f"Exists! Skipping {out_filename}")
             continue
         extractPDB(pdb_filename, str(out_filename), chain)
         protein = load_structure_np(out_filename,center=False)
