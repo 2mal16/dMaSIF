@@ -121,15 +121,11 @@ def get_single(pdb_id: str,chains: list):
 
     # Extract chains of interest.
     for chain in chains:
-        print(chain)
-
-        out_filename = pdb_dir/f"{pdb_id}_{chain}.pdb"
-        print(out_filename)
-
-        print(pdb_filename)
-        
+        out_filename = Path(pdb_dir/f"{pdb_id}_{chain}.pdb")
+        print(f"Processing{out_filename}")
+        if out_filename.exists():
+            continue
         extractPDB(pdb_filename, str(out_filename), chain)
-        
         protein = load_structure_np(out_filename,center=False)
         if protein is not None:
             np.save(npy_dir / f"{pdb_id}_{chain}_atomxyz", protein["xyz"])

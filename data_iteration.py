@@ -258,6 +258,9 @@ def iterate(
         net.train()
         torch.set_grad_enabled(True)
 
+    # Break of inference if the files exist
+    
+
     # Statistics and fancy graphs to summarize the epoch:
     info = []
     total_processed_pairs = 0
@@ -265,6 +268,16 @@ def iterate(
     for it, protein_pair in enumerate(
             tqdm(dataset)
     ):  # , desc="Test " if test else "Train")):
+        pdb_id = pdb_ids[it]
+        emb_id = 1
+        vtk_path = Path(save_path / pdb_id) + f"_pred_emb{emb_id}"
+        xyz_path = Path(save_path / pdb_id) + "_predcoords.npy"
+        features_path = Path(save_path / pdb_id) + f"_predfeatures_emb{emb_id}.npy"
+
+        if test and vtk_path.exists() and xyz_path.exists() and features_path.exists():
+            print(f"Skipping {pdb_id} as, vtk, coords and features already exist")
+            continue
+
         protein_batch_size = protein_pair.atom_coords_p1_batch[-1].item() + 1
         if save_path is not None:
             batch_ids = pdb_ids[
