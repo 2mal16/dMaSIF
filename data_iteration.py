@@ -274,8 +274,8 @@ def iterate(
         xyz_path = Path(save_path / pdb_id) + "_predcoords.npy"
         features_path = Path(save_path / pdb_id) + f"_predfeatures_emb{emb_id}.npy"
 
-        if test and vtk_path.exists() and xyz_path.exists() and features_path.exists():
-            print(f"Skipping {pdb_id} as, vtk, coords and features already exist")
+        if vtk_path.exists() and xyz_path.exists() and features_path.exists():
+            print(f"Skipping {pdb_id} as, vtk, coords and features already exist at {save_path / pdb_id}")
             continue
 
         protein_batch_size = protein_pair.atom_coords_p1_batch[-1].item() + 1
