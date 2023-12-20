@@ -11,7 +11,7 @@ RUN apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/r
 
 RUN apt-get update -y \
     && apt-get install -y apt-utils git curl ca-certificates bzip2 cmake tree htop bmon iotop g++ \
-    && apt-get install -y libglib2.0-0 libsm6 libxext6 libxrender-dev wget
+    && apt-get install -y libglib2.0-0 libsm6 libxext6 libxrender-dev wget make
 
 RUN cd / && wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     && chmod +x /Miniconda3-latest-Linux-x86_64.sh \
@@ -31,7 +31,7 @@ ENV CONDA_AUTO_UPDATE_CONDA=false
 
 ENV PATH=/usr/local/cuda-${CUDA}/bin:$PATH
 ENV CPATH=/usr/local/cuda-${CUDA}/include:$CPATH
-ENV LD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/lib64:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/compat:$LD_LIBRARY_PATH
 ENV DYLD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/lib:$DYLD_LIBRARY_PATH
 
 RUN pip install torch==1.6.0 && \
@@ -68,13 +68,16 @@ RUN mkdir -p /root/.ssh \
     && stat /root/.ssh/authorized_keys \
     && rm -rf /tmp/*
 
+RUN mkdir /app/
+WORKDIR /app
 
 RUN git clone https://github.com/FreyrS/dMaSIF.git
+RUN git clone https://github.com/casperg92/MaSIF_colab.git
+RUN git clone https://github.com/DavidGraber/protein_interaction_DG.git
+RUN git clone https://github.com/rlabduke/reduce.git
+WORKDIR reduce
+RUN make install
 
-ADD Makefile /dMaSIF/Makefile
-
-WORKDIR /dMaSIF
-
-VOLUME dmasif
+WORKDIR /app
 
 CMD ["/bin/bash"]
