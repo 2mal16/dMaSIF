@@ -19,6 +19,10 @@ def load_structure_np(fname, center):
         coords.append(atom.get_coord())
         types.append(ele2num.get(atom.element, 0))  # set default value
 
+    if len(coords) == 0:
+        print("No atoms found in file: {}".format(fname))
+        return None
+    
     coords = np.stack(coords)
     types_array = np.zeros((len(types), len(ele2num)))
     for i, t in enumerate(types):
