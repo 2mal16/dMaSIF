@@ -45,7 +45,7 @@ elif args.pdb_list != "":
     pdb_list = [pdb for pdb in pdb_list if not Path(single_data_dir / f"{pdb.split('_')[0]}{pdb.split('_')[1]}_atomxyz.npy").exists()]
     print(pdb_list)
     test_dataset = [load_protein_pair(pdb, single_data_dir,single_pdb=True) for pdb in pdb_list]
-    test_dataset = filter(lambda x: x is not None, test_dataset)
+    test_dataset = list(filter(lambda x: x is not None, test_dataset))
     test_pdb_ids = [pdb for pdb in pdb_list]
 else:
     test_dataset = ProteinPairsSurfaces(
