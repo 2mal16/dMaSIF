@@ -41,8 +41,8 @@ elif args.pdb_list != "":
     with open(args.pdb_list) as f:
         pdb_list = f.read().splitlines()
     single_data_dir = Path("./data_preprocessing/npys/")
-    print(pdb_list)
-    pdb_list = [pdb for pdb in pdb_list if Path(single_data_dir / f"{pdb.split("_")[0]}{pdb.split("_")[1]}_atomxyz.npy").exists()]
+    pdb_chain1 = [pdb.split("_")[1] for pdb in pdb_list]
+    pdb_list = [pdb if Path(single_data_dir / f"{pdb.split('_')[0]}{pdb.split('_')[1]}_atomxyz.npy").exists() for pdb in pdb_list]
     print(pdb_list)
     test_dataset = [load_protein_pair(pdb, single_data_dir,single_pdb=True) for pdb in pdb_list]
     test_pdb_ids = [pdb for pdb in pdb_list]
